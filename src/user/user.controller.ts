@@ -1,11 +1,11 @@
 import { Request, Response, Router } from "express";
 import queryString from "query-string";
+import axios from "axios";
 import {
   SPOTIFY_CLIENT_ID,
   SPOTIFY_CLIENT_SECRET,
   SPOTIFY_REDIRECT_URI,
-} from "../config/globals";
-import axios from "axios";
+} from "../config/globals.js";
 
 export const userRouter = Router();
 
