@@ -1,6 +1,7 @@
 // src/index.js
-import express, { Express, Request, Response } from "express";
-import { userRouter } from "./user/user.controller";
+import express from "express";
+import { Express, Request, Response } from "express";
+import { userRouter } from "./user/user.controller.js";
 
 export const app: Express = express();
 const port = process.env.PORT || 3000;

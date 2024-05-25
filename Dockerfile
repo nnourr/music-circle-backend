@@ -1,25 +1,25 @@
-#Build stage
-FROM node AS build
+# Use the official Node.js image as the base image
+FROM node:20
 
-WORKDIR /app
+# Create and set the working directory inside the container
+WORKDIR /usr/src/app
 
+# Copy package.json and package-lock.json to the working directory
 COPY package*.json ./
 
+# Install dependencies
 RUN npm install
 
+# Copy the rest of the application code to the working directory
 COPY . ./
 
+# Compile TypeScript files
 RUN npm run build
 
-#Production stage
-FROM node:16-alpine AS production
+# Expose the port the app runs on
+EXPOSE 3000
 
-WORKDIR /app
+CMD ["npm", "start"]
 
-COPY package*.json ./
-
-RUN npm ci --only=production
-
-COPY --from=build /app/dist ./dist
-
-CMD ["node", "dist/index.js"]
+# Command to run the application
+# CMD ["tail", "-f", "/dev/null"]
