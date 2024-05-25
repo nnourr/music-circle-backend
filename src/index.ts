@@ -1,9 +1,6 @@
 // src/index.js
 import express, { Express, Request, Response } from "express";
-import dotenv from "dotenv";
 import { userRouter } from "./user/user.controller";
-
-dotenv.config();
 
 export const app: Express = express();
 const port = process.env.PORT || 3000;

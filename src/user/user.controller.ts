@@ -5,11 +5,12 @@ import {
   SPOTIFY_CLIENT_SECRET,
   SPOTIFY_REDIRECT_URI,
 } from "../config/globals";
+import axios from "axios";
 
 export const userRouter = Router();
 
 userRouter.get("/login", (req: Request, res: Response) => {
-  const state = "hdickalporhfsjcys";
+  const state = "hdickalporhfsjcy";
   const scope = "user-top-read";
 
   res.redirect(
@@ -24,12 +25,9 @@ userRouter.get("/login", (req: Request, res: Response) => {
   );
 });
 
-userRouter.get("/callback", function (req, res) {
+userRouter.get("/callback", async function (req, res) {
   const code = req.query.code || null;
   const state = req.query.state || null;
-  const client_id = SPOTIFY_CLIENT_ID;
-  const client_secret = SPOTIFY_CLIENT_ID;
-
   if (state === null) {
     res.redirect(
       "/#" +
@@ -38,23 +36,31 @@ userRouter.get("/callback", function (req, res) {
         })
     );
   } else {
-    const authOptions = {
-      url: "https://accounts.spotify.com/api/token",
-      form: {
-        code: code,
-        redirect_uri: SPOTIFY_REDIRECT_URI,
-        grant_type: "authorization_code",
-        client_id: SPOTIFY_CLIENT_ID,
-      },
-      headers: {
-        "content-type": "application/x-www-form-urlencoded",
-        Authorization:
-          "Basic " +
-          new (Buffer as any).from(
-            SPOTIFY_CLIENT_ID + ":" + SPOTIFY_CLIENT_SECRET
-          ).toString("base64"),
-      },
-      json: true,
-    };
+    try {
+      const response = await axios.post(
+        "https://accounts.spotify.com/api/token",
+        queryString.stringify({
+          code: code,
+          redirect_uri: SPOTIFY_REDIRECT_URI,
+          grant_type: "authorization_code",
+          client_id: SPOTIFY_CLIENT_ID,
+        }),
+        {
+          headers: {
+            "content-type": "application/x-www-form-urlencoded",
+            Authorization:
+              "Basic " +
+              new (Buffer as any).from(
+                SPOTIFY_CLIENT_ID + ":" + SPOTIFY_CLIENT_SECRET
+              ).toString("base64"),
+          },
+        }
+      );
+      const { access_token, refresh_token } = response.data;
+      res.json({ access_token, refresh_token });
+    } catch (e) {
+      console.error(e);
+      res.status(500).json({ error: "Failed to exchange token" });
+    }
   }
 });
