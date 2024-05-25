@@ -4,8 +4,8 @@ services:
    context: .
    target: build
   volumes:
-   - ./:/app
-   - /app/node_modules
+   - ./:/src
+   - /src/node_modules
   ports:
-   - 3000:3000
+   - 127.0.0.1:6090:3000
   command: npm run dev
