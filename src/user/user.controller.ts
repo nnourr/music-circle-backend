@@ -8,17 +8,22 @@ const authService = new AuthService();
 const spotifyService = new SpotifyService();
 const userRepo = new UserRepo();
 
-userRouter.post("/:username", async (req: Request, res: Response) => {
-  const username = req.params.username;
+userRouter.post("/:email", async (req: Request, res: Response) => {
+  const email = req.params.email;
   const loginCode = req.body?.loginCode;
-  const email = req.body?.email;
+  const username = req.body?.username;
 
-  if (loginCode === undefined || email === undefined) {
+  if (
+    loginCode === undefined ||
+    email === undefined ||
+    username === undefined
+  ) {
     res.status(400).json("Bad request");
     return;
   }
   let accessToken = "";
   let userInfo: any = {};
+  let userArtists: any = {};
 
   try {
     accessToken = await authService.getAccessToken(loginCode);
@@ -36,13 +41,21 @@ userRouter.post("/:username", async (req: Request, res: Response) => {
     return;
   }
 
+  try {
+    userArtists = await spotifyService.getArtists(accessToken);
+  } catch (error: any) {
+    console.log(error);
+    res.status(500).json(error);
+    return;
+  }
+
   if (userInfo.email !== email) {
     res.status(400).json("email missmatch");
     return;
   }
 
   try {
-    userRepo.setUser(username, userInfo.email, accessToken, {});
+    userRepo.setUser(username, userInfo.email, accessToken, userArtists);
   } catch (error: any) {
     console.log(error);
     res.status(500).json(error);
