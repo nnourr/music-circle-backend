@@ -1,6 +1,7 @@
 // src/index.js
 import express from "express";
 import { Express, Request, Response } from "express";
+import { authRouter } from "./auth/auth.controller.js";
 import { userRouter } from "./user/user.controller.js";
 
 export const app: Express = express();
@@ -10,6 +11,7 @@ app.get("/", (req: Request, res: Response) => {
   res.send("Express + TypeScript Server");
 });
 
+app.use("/auth", authRouter);
 app.use("/user", userRouter);
 
 app.listen(port, () => {
