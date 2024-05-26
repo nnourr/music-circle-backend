@@ -7,9 +7,9 @@ import {
   SPOTIFY_REDIRECT_URI,
 } from "../config/globals.js";
 
-export const userRouter = Router();
+export const authRouter = Router();
 
-userRouter.get("/login", (req: Request, res: Response) => {
+authRouter.get("/login", (req: Request, res: Response) => {
   const state = "hdickalporhfsjcy";
   const scope = "user-top-read";
 
@@ -25,7 +25,7 @@ userRouter.get("/login", (req: Request, res: Response) => {
   );
 });
 
-userRouter.get("/callback", async function (req, res) {
+authRouter.get("/callback", async function (req, res) {
   const code = req.query.code || null;
   const state = req.query.state || null;
   if (state === null) {
