@@ -1,6 +1,5 @@
-import axios from "axios";
 import { Request, Response, Router } from "express";
-import { SpotifyService } from "./spotify.service";
+import { SpotifyService } from "./spotify.service.js";
 
 export const spotifyRouter = Router();
 const spotifyService = new SpotifyService();
