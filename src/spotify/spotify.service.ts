@@ -26,7 +26,7 @@ export class SpotifyService {
           Authorization: "Bearer " + access_token,
         },
       });
-      return { user: userInfo.data };
+      return userInfo.data;
     } catch (error: any) {
       throw error;
     }
