@@ -11,18 +11,20 @@ export const authRouter = Router();
 
 authRouter.get("/login", (req: Request, res: Response) => {
   const state = "hdickalporhfsjcy";
-  const scope = "user-top-read";
+  const scope = "user-top-read user-read-email";
 
-  res.redirect(
-    "https://accounts.spotify.com/authorize?" +
+  res.writeHead(302, {
+    Location:
+      "https://accounts.spotify.com/authorize?" +
       queryString.stringify({
         response_type: "code",
         client_id: SPOTIFY_CLIENT_ID,
         scope: scope,
         redirect_uri: SPOTIFY_REDIRECT_URI,
         state: state,
-      })
-  );
+      }),
+  });
+  res.send();
 });
 
 authRouter.get("/callback", async function (req, res) {
@@ -57,6 +59,7 @@ authRouter.get("/callback", async function (req, res) {
         }
       );
       const { access_token, refresh_token } = response.data;
+
       res.json({ access_token, refresh_token });
     } catch (e) {
       console.error(e);

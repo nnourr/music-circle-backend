@@ -9,6 +9,15 @@ spotifyRouter.get("/:token/artists", async (req: Request, res: Response) => {
     const artists = await spotifyService.getArtists(req.params.token);
     res.json(artists);
   } catch (error: any) {
-    res.status(401).json(error);
+    res.status(500).json(error);
+  }
+});
+
+spotifyRouter.get("/:token", async (req: Request, res: Response) => {
+  try {
+    const userInfo = await spotifyService.getUserInfo(req.params.token);
+    res.json(userInfo.user);
+  } catch (error: any) {
+    res.status(500).json(error);
   }
 });
