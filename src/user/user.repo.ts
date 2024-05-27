@@ -1,4 +1,4 @@
-import { userCollection } from "@/firebase/firebase.init";
+import { userCollection } from "../firebase/firebase.init.js";
 import { doc, setDoc } from "firebase/firestore";
 
 export class UserRepo {

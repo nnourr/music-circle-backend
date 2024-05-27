@@ -1,4 +1,4 @@
-// import { SpotifyService } from "@/spotify/spotify.service";
+// import { SpotifyService } from "../spotify/spotify.service";
 // import axios from "axios";
 
 // export class UserService {

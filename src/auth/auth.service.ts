@@ -2,7 +2,7 @@ import {
   SPOTIFY_REDIRECT_URI,
   SPOTIFY_CLIENT_ID,
   SPOTIFY_CLIENT_SECRET,
-} from "@/config/globals";
+} from "../config/globals.js";
 import axios from "axios";
 import queryString from "query-string";
 
