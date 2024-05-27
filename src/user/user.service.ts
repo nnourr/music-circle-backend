@@ -33,6 +33,7 @@ export class UserService {
     }
 
     if (userInfo.email !== email) {
+      console.log("email missmatch");
       throw { error: "email missmatch" };
     }
 
