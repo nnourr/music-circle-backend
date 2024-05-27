@@ -19,7 +19,7 @@ userRouter.post("/:email", async (req: Request, res: Response) => {
   }
 
   try {
-    res.status(200).json(userService.setUser(loginCode, email, username));
+    res.status(200).json(await userService.setUser(loginCode, email, username));
     return;
   } catch (error) {
     res.status(500).json(error);
