@@ -6,7 +6,7 @@ export class UserService {
   spotifyService = new SpotifyService();
   authService = new AuthService();
   userRepo = new UserRepo();
-  async setUser(loginCode: string, email: string, username: string) {
+  async setUser(loginCode: string, email: string) {
     let accessToken = "";
     let userInfo: any = {};
     let userArtists: any = {};
@@ -34,7 +34,14 @@ export class UserService {
 
     if (userInfo.email !== email) {
       console.log("email missmatch");
-      throw { error: "email missmatch" };
+      throw new Error("email missmatch");
+    }
+
+    let username = userInfo.display_name;
+
+    if (username === undefined) {
+      const parts = email.split("@");
+      username = parts[0];
     }
 
     try {
