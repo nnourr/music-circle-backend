@@ -16,7 +16,7 @@ spotifyRouter.get("/:token/artists", async (req: Request, res: Response) => {
 spotifyRouter.get("/:token", async (req: Request, res: Response) => {
   try {
     const userInfo = await spotifyService.getUserInfo(req.params.token);
-    res.json(userInfo.user);
+    res.json(userInfo);
   } catch (error: any) {
     res.status(500).json(error);
   }

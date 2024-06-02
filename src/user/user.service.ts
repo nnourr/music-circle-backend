@@ -1,15 +1,18 @@
+import { SpotifyUserInfoResponse } from "@/spotify/spotify.interface.js";
 import { AuthService } from "../auth/auth.service.js";
 import { SpotifyService } from "../spotify/spotify.service.js";
 import { UserRepo } from "./user.repo.js";
+import { ArtistInterface } from "@/artist/artist.interface.js";
+import { UserInterface } from "./user.interface.js";
 
 export class UserService {
   spotifyService = new SpotifyService();
   authService = new AuthService();
   userRepo = new UserRepo();
   async setUser(loginCode: string, email: string, team: string) {
-    let accessToken = "";
-    let userInfo: any = {};
-    let userArtists: any = {};
+    let accessToken: string;
+    let userInfo: SpotifyUserInfoResponse;
+    let userArtists: ArtistInterface[];
 
     try {
       accessToken = await this.authService.getAccessToken(loginCode);
@@ -34,7 +37,7 @@ export class UserService {
 
     if (userInfo.email !== email) {
       console.error("email missmatch");
-      throw new Error("email missmatch");
+      throw "email missmatch";
     }
 
     let username = userInfo.display_name;
@@ -45,12 +48,28 @@ export class UserService {
     }
 
     try {
-      await this.userRepo.setUser(username, email, team, userArtists);
+      await this.userRepo.setUser(
+        this.createUser(username, email, [team], userArtists)
+      );
     } catch (error: any) {
       console.error(error);
       throw error;
     }
 
     return { username: username, email: email };
+  }
+
+  private createUser(
+    username: string,
+    email: string,
+    teams: string[],
+    userArtists: ArtistInterface[]
+  ): UserInterface {
+    return {
+      username: username,
+      email: email,
+      teams: teams,
+      artists: userArtists,
+    };
   }
 }
