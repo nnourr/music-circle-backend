@@ -26,7 +26,7 @@ export interface SpotifyUserInfoResponse {
 }
 
 export interface SpotifyTopArtistsResponse {
-  items: SpotifyArtist[];
+  items: SpotifyArtistInterface[];
   total: number;
   limit: number;
   offset: number;
