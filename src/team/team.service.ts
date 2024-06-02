@@ -1,4 +1,4 @@
-import { TeamRepo } from "./team.repo";
+import { TeamRepo } from "./team.repo.js";
 
 const teamRepo = new TeamRepo();
 export class TeamService {

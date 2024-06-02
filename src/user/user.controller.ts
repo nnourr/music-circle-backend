@@ -18,7 +18,7 @@ userRouter.post("/:email", async (req: Request, res: Response) => {
     res.status(200).json(await userService.setUser(loginCode, email, team));
     return;
   } catch (error) {
-    res.status(500).json(error);
+    res.status(500).json({ error: error });
     return;
   }
 });

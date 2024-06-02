@@ -1,5 +1,5 @@
 import { Request, Response, Router } from "express";
-import { TeamService } from "./team.service";
+import { TeamService } from "./team.service.js";
 
 export const teamRouter = Router();
 const teamService = new TeamService();
