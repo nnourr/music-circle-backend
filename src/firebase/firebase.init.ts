@@ -23,3 +23,4 @@ const firebaseConfig = {
 const firebaseApp = initializeApp(firebaseConfig);
 const db = getFirestore(firebaseApp);
 export const userCollection = collection(db, "users");
+export const teamCollection = collection(db, "teams");

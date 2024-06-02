@@ -6,7 +6,7 @@ export class UserService {
   spotifyService = new SpotifyService();
   authService = new AuthService();
   userRepo = new UserRepo();
-  async setUser(loginCode: string, email: string) {
+  async setUser(loginCode: string, email: string, team: string) {
     let accessToken = "";
     let userInfo: any = {};
     let userArtists: any = {};
@@ -14,26 +14,26 @@ export class UserService {
     try {
       accessToken = await this.authService.getAccessToken(loginCode);
     } catch (error: any) {
-      console.log(error);
+      console.error(error);
       throw error;
     }
 
     try {
       userInfo = await this.spotifyService.getUserInfo(accessToken);
     } catch (error: any) {
-      console.log(error);
+      console.error(error);
       throw error;
     }
 
     try {
       userArtists = await this.spotifyService.getArtists(accessToken);
     } catch (error: any) {
-      console.log(error);
+      console.error(error);
       throw error;
     }
 
     if (userInfo.email !== email) {
-      console.log("email missmatch");
+      console.error("email missmatch");
       throw new Error("email missmatch");
     }
 
@@ -45,12 +45,12 @@ export class UserService {
     }
 
     try {
-      this.userRepo.setUser(username, userInfo.email, accessToken, userArtists);
+      await this.userRepo.setUser(username, email, team, userArtists);
     } catch (error: any) {
-      console.log(error);
+      console.error(error);
       throw error;
     }
 
-    return { username: username, email: userInfo.email };
+    return { username: username, email: email };
   }
 }

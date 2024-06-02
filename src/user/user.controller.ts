@@ -7,14 +7,15 @@ const userService = new UserService();
 userRouter.post("/:email", async (req: Request, res: Response) => {
   const email = req.params.email;
   const loginCode = req.body?.loginCode;
+  const team = req.body?.team;
 
-  if (loginCode === undefined || email === undefined) {
+  if (loginCode === undefined || email === undefined || team === undefined) {
     res.status(400).json("Bad request");
     return;
   }
 
   try {
-    res.status(200).json(await userService.setUser(loginCode, email));
+    res.status(200).json(await userService.setUser(loginCode, email, team));
     return;
   } catch (error) {
     res.status(500).json(error);

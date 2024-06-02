@@ -1,15 +1,19 @@
+import { arrayUnion, doc, setDoc } from "firebase/firestore";
 import { userCollection } from "../firebase/firebase.init.js";
-import { doc, setDoc } from "firebase/firestore";
 
 export class UserRepo {
-  setUser(username: string, email: string, accessCode: string, artists: any) {
+  async setUser(username: string, email: string, team: string, artists: any) {
     try {
-      setDoc(doc(userCollection, email), {
-        accessCode: accessCode,
-        username: username,
-        email: email,
-        artists: artists,
-      });
+      await setDoc(
+        doc(userCollection, email),
+        {
+          username: username,
+          email: email,
+          artists: artists,
+          teams: arrayUnion(team),
+        },
+        { merge: true }
+      );
     } catch (error) {
       throw error;
     }
