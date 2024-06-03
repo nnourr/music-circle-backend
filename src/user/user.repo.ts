@@ -9,7 +9,7 @@ export class UserRepo {
         doc(userCollection, user.email),
         {
           ...user,
-          teams: arrayUnion(...user.teams),
+          circles: arrayUnion(...user.circles),
         },
         { merge: true }
       );
