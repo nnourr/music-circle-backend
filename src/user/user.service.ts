@@ -9,7 +9,7 @@ export class UserService {
   spotifyService = new SpotifyService();
   authService = new AuthService();
   userRepo = new UserRepo();
-  async setUser(loginCode: string, email: string, circle: string) {
+  async setUser(loginCode: string) {
     let accessToken: string;
     let userInfo: SpotifyUserInfoResponse;
     let userArtists: ArtistInterface[];
@@ -35,28 +35,23 @@ export class UserService {
       throw error;
     }
 
-    if (userInfo.email !== email) {
-      console.error("email missmatch");
-      throw "email missmatch";
-    }
-
     let username = userInfo.display_name;
 
     if (username === undefined) {
-      const parts = email.split("@");
+      const parts = userInfo.email.split("@");
       username = parts[0];
     }
 
     try {
       await this.userRepo.setUser(
-        this.createUser(username, email, [circle], userArtists)
+        this.createUser(username, userInfo.email, [], userArtists)
       );
     } catch (error: any) {
       console.error(error);
       throw error;
     }
 
-    return { username: username, email: email };
+    return { username: username, email: userInfo.email };
   }
 
   private createUser(

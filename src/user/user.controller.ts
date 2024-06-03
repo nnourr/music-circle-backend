@@ -4,18 +4,16 @@ import { UserService } from "./user.service.js";
 export const userRouter = Router();
 const userService = new UserService();
 
-userRouter.post("/:email", async (req: Request, res: Response) => {
-  const email = req.params.email;
+userRouter.post("/", async (req: Request, res: Response) => {
   const loginCode = req.body?.loginCode;
-  const circle = req.body?.circle;
 
-  if (loginCode === undefined || email === undefined || circle === undefined) {
+  if (loginCode === undefined) {
     res.status(400).json("Bad request");
     return;
   }
 
   try {
-    res.status(200).json(await userService.setUser(loginCode, email, circle));
+    res.status(200).json(await userService.setUser(loginCode));
     return;
   } catch (error) {
     res.status(500).json({ error: error });
