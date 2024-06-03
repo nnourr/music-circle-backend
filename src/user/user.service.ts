@@ -54,6 +54,24 @@ export class UserService {
     return { username: username, email: userInfo.email };
   }
 
+  async addUserToCircle(email: string, circleCode: string) {
+    try {
+      await this.userRepo.addUserToCircle(email, circleCode);
+    } catch (error: any) {
+      console.error(error);
+      throw error;
+    }
+  }
+
+  getUser(email: string) {
+    try {
+      return this.userRepo.getUser(email);
+    } catch (error: any) {
+      console.error(error);
+      throw error;
+    }
+  }
+
   private createUser(
     username: string,
     email: string,
