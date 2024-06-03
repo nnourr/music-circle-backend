@@ -9,7 +9,7 @@ export class UserService {
   spotifyService = new SpotifyService();
   authService = new AuthService();
   userRepo = new UserRepo();
-  async setUser(loginCode: string, email: string, team: string) {
+  async setUser(loginCode: string, email: string, circle: string) {
     let accessToken: string;
     let userInfo: SpotifyUserInfoResponse;
     let userArtists: ArtistInterface[];
@@ -49,7 +49,7 @@ export class UserService {
 
     try {
       await this.userRepo.setUser(
-        this.createUser(username, email, [team], userArtists)
+        this.createUser(username, email, [circle], userArtists)
       );
     } catch (error: any) {
       console.error(error);
@@ -62,13 +62,13 @@ export class UserService {
   private createUser(
     username: string,
     email: string,
-    teams: string[],
+    circles: string[],
     userArtists: ArtistInterface[]
   ): UserInterface {
     return {
       username: username,
       email: email,
-      teams: teams,
+      circles: circles,
       artists: userArtists,
     };
   }

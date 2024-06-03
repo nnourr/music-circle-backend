@@ -5,13 +5,12 @@ import { authRouter } from "./auth/auth.controller.js";
 import { spotifyRouter } from "./spotify/spotify.controller.js";
 import { userRouter } from "./user/user.controller.js";
 import cors from "cors";
-import { teamRouter } from "./team/team.controller.js";
+import { circleRouter } from "./circle/circle.controller.js";
 
 export const app: Express = express();
 const port = process.env.PORT || 3000;
 
 app.use(cors());
-app.options("*", cors());
 app.use(express.json());
 
 app.get("/", (req: Request, res: Response) => {
@@ -20,7 +19,7 @@ app.get("/", (req: Request, res: Response) => {
 
 app.use("/auth", authRouter);
 app.use("/user", userRouter);
-app.use("/team", teamRouter);
+app.use("/circle", circleRouter);
 app.use("/spotify", spotifyRouter);
 
 app.listen(port, () => {
