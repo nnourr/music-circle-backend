@@ -10,6 +10,7 @@ import {
 } from "firebase/firestore";
 import { userCollection } from "../firebase/firebase.init.js";
 import { UserInterface } from "./user.interface.js";
+import { NotFoundError } from "../config/config.exceptions.js";
 
 export class UserRepo {
   async setUser(user: UserInterface) {

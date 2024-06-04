@@ -1,6 +1,7 @@
 import { addDoc, doc, getDoc } from "firebase/firestore";
 import { circleCollection } from "../firebase/firebase.init.js";
 import { CircleInterface } from "./circle.interface.js";
+import { NotFoundError } from "../config/config.exceptions.js";
 
 export class CircleRepo {
   async addCircle(circleName: string): Promise<string> {
