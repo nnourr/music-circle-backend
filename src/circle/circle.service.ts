@@ -1,10 +1,10 @@
-import { UserInterface } from "@/user/user.interface.js";
 import {
   CircleInterface,
   CircleWithUserInfoInterface as CircleWithUsersInterface,
 } from "./circle.interface.js";
 import { CircleRepo } from "./circle.repo.js";
-import { UserService } from "@/user/user.service.js";
+import { UserInterface } from "../user/user.interface.js";
+import { UserService } from "../user/user.service.js";
 
 const circleRepo = new CircleRepo();
 const userService = new UserService();
