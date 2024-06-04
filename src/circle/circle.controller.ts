@@ -13,3 +13,14 @@ circleRouter.post("/:circle_name", async (req: Request, res: Response) => {
     res.status(500).json(response).send();
   }
 });
+
+circleRouter.get("/:circle_id", async (req: Request, res: Response) => {
+  const circleId = req.params.circle_id;
+  try {
+    res.json(await circleService.getCircleWithUsers(circleId)).send();
+  } catch (error) {
+    const response = { error: error };
+    console.error(response);
+    res.status(500).json(response).send();
+  }
+});

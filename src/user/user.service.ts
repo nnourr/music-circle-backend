@@ -54,22 +54,16 @@ export class UserService {
     return { username: username, email: userInfo.email };
   }
 
-  async addUserToCircle(email: string, circleCode: string) {
-    try {
-      await this.userRepo.addUserToCircle(email, circleCode);
-    } catch (error: any) {
-      console.error(error);
-      throw error;
-    }
+  addUserToCircle(email: string, circleCode: string) {
+    this.userRepo.addUserToCircle(email, circleCode);
   }
 
   getUser(email: string) {
-    try {
-      return this.userRepo.getUser(email);
-    } catch (error: any) {
-      console.error(error);
-      throw error;
-    }
+    return this.userRepo.getUser(email);
+  }
+
+  getUsersInCircle(circleId: string): Promise<UserInterface[]> {
+    return this.userRepo.getUsersInCircle(circleId);
   }
 
   private createUser(
