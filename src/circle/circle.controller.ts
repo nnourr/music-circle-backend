@@ -1,6 +1,6 @@
 import { Request, Response, Router } from "express";
 import { CircleService } from "./circle.service.js";
-import { NotFoundError } from "@/config/config.exceptions.js";
+import { NotFoundError } from "../config/config.exceptions.js";
 
 export const circleRouter = Router();
 const circleService = new CircleService();

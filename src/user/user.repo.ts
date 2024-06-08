@@ -30,7 +30,7 @@ export class UserRepo {
 
   async addUserToCircle(email: string, circleCode: string) {
     try {
-      await updateDoc(doc(userCollection, email), {
+      const updatedDoc = await updateDoc(doc(userCollection, email), {
         circles: arrayUnion(circleCode),
       });
     } catch (error) {

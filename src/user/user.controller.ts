@@ -1,6 +1,7 @@
 import e, { Request, Response, Router } from "express";
 import { UserService } from "./user.service.js";
 import { UserInterface } from "./user.interface.js";
+import { NotFoundError } from "../config/config.exceptions.js";
 
 export const userRouter = Router();
 const userService = new UserService();
@@ -40,7 +41,8 @@ userRouter.post(
       return;
     } catch (error) {
       console.error(error);
-      res.status(500).json({ error: error });
+      const status = error instanceof NotFoundError ? 404 : 500;
+      res.status(status).json({ error: error });
       return;
     }
   }

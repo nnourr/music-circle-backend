@@ -1,14 +1,16 @@
-import { SpotifyUserInfoResponse } from "@/spotify/spotify.interface.js";
+import { SpotifyUserInfoResponse } from "../spotify/spotify.interface.js";
 import { AuthService } from "../auth/auth.service.js";
 import { SpotifyService } from "../spotify/spotify.service.js";
 import { UserRepo } from "./user.repo.js";
-import { ArtistInterface } from "@/artist/artist.interface.js";
+import { ArtistInterface } from "../artist/artist.interface.js";
 import { UserInterface } from "./user.interface.js";
+import { CircleRepo } from "../circle/circle.repo.js";
 
 export class UserService {
   spotifyService = new SpotifyService();
   authService = new AuthService();
   userRepo = new UserRepo();
+  circleRepo = new CircleRepo();
   async setUser(loginCode: string) {
     let accessToken: string;
     let userInfo: SpotifyUserInfoResponse;
@@ -54,7 +56,8 @@ export class UserService {
     return { username: username, email: userInfo.email };
   }
 
-  addUserToCircle(email: string, circleCode: string) {
+  async addUserToCircle(email: string, circleCode: string) {
+    await this.circleRepo.getCircle(circleCode);
     this.userRepo.addUserToCircle(email, circleCode);
   }
 

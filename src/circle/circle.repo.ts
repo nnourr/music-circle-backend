@@ -13,7 +13,7 @@ export class CircleRepo {
 
   async getCircle(circleId: string): Promise<CircleInterface> {
     const circleDocument = await getDoc(doc(circleCollection, circleId));
-    if (!circleDocument.exists || circleDocument.data() === undefined) {
+    if (!circleDocument.exists || !!!circleDocument.data()) {
       throw new NotFoundError("Unable to find Circle");
     }
     const circle: CircleInterface = circleDocument.data() as CircleInterface;
