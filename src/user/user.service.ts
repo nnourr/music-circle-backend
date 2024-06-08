@@ -1,11 +1,10 @@
-import { SpotifyUserInfoResponse } from "@/spotify/spotify.interface.js";
+import { SpotifyUserInfoResponse } from "../spotify/spotify.interface.js";
 import { AuthService } from "../auth/auth.service.js";
 import { SpotifyService } from "../spotify/spotify.service.js";
 import { UserRepo } from "./user.repo.js";
-import { ArtistInterface } from "@/artist/artist.interface.js";
+import { ArtistInterface } from "../artist/artist.interface.js";
 import { UserInterface } from "./user.interface.js";
 import { CircleRepo } from "../circle/circle.repo.js";
-import { NotFoundError } from "@/config/config.exceptions.js";
 
 export class UserService {
   spotifyService = new SpotifyService();

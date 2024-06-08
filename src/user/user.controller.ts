@@ -1,7 +1,7 @@
 import e, { Request, Response, Router } from "express";
 import { UserService } from "./user.service.js";
 import { UserInterface } from "./user.interface.js";
-import { NotFoundError } from "@/config/config.exceptions.js";
+import { NotFoundError } from "../config/config.exceptions.js";
 
 export const userRouter = Router();
 const userService = new UserService();

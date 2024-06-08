@@ -4,7 +4,7 @@ import {
   SpotifyTopArtistsResponse,
   SpotifyUserInfoResponse,
 } from "./spotify.interface.js";
-import { ArtistInterface } from "@/artist/artist.interface.js";
+import { ArtistInterface } from "../artist/artist.interface.js";
 
 export class SpotifyService {
   async getArtists(access_token: string): Promise<ArtistInterface[]> {
