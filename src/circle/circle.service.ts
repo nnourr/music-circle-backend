@@ -1,5 +1,6 @@
 import {
   CircleInterface,
+  CircleWithCodeInterface,
   CircleWithUserInfoInterface as CircleWithUsersInterface,
 } from "./circle.interface.js";
 import { CircleRepo } from "./circle.repo.js";
@@ -13,7 +14,7 @@ export class CircleService {
     return await circleRepo.addCircle(circleName);
   }
 
-  async getCircle(circleId: string): Promise<CircleInterface> {
+  async getCircle(circleId: string): Promise<CircleWithCodeInterface> {
     return await circleRepo.getCircle(circleId);
   }
 

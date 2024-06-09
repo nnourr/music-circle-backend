@@ -2,6 +2,7 @@ import e, { Request, Response, Router } from "express";
 import { UserService } from "./user.service.js";
 import { UserInterface } from "./user.interface.js";
 import { NotFoundError } from "../config/config.exceptions.js";
+import { CircleWithCodeInterface } from "../circle/circle.interface.js";
 
 export const userRouter = Router();
 const userService = new UserService();
@@ -9,7 +10,7 @@ const userService = new UserService();
 userRouter.post("/", async (req: Request, res: Response) => {
   const loginCode = req.body?.loginCode;
 
-  if (loginCode === undefined) {
+  if (!!!loginCode) {
     res.status(400).json("Bad request");
     return;
   }
@@ -30,7 +31,7 @@ userRouter.post(
     const userEmail = req.params.email;
     const circleCode = req.params.circleCode;
 
-    if (userEmail === undefined || circleCode === undefined) {
+    if (!!!userEmail || !!!circleCode) {
       res.status(400).json("Bad request");
       return;
     }
@@ -51,7 +52,7 @@ userRouter.post(
 userRouter.get("/:email", async (req: Request, res: Response) => {
   const userEmail = req.params.email;
 
-  if (userEmail === undefined) {
+  if (!!!userEmail) {
     res.status(400).json("Bad request");
     return;
   }
@@ -67,22 +68,22 @@ userRouter.get("/:email", async (req: Request, res: Response) => {
   }
 });
 
-// userRouter.get("/:username", async (req: Request, res: Response) => {
-//   const email = req.params.email;
-//   try {
-//     const userInfo = await userService.getUserInfo(email);
-//     res.json(userInfo);
-//   } catch (error: any) {
-//     res.status(500).json(error);
-//   }
-// });
+userRouter.get("/:email/circles", async (req: Request, res: Response) => {
+  const userEmail = req.params.email;
 
-// userRouter.get("/:email/artists", async (req: Request, res: Response) => {
-//   const email = req.params.email;
-//   try {
-//     const userInfo = await userService.getArtists(email);
-//     res.json(userInfo);
-//   } catch (error: any) {
-//     res.status(500).json(error);
-//   }
-// });
+  if (!!!userEmail) {
+    res.status(400).json("Bad request");
+    return;
+  }
+
+  try {
+    const userCircles: CircleWithCodeInterface[] =
+      await userService.getUserCircles(userEmail);
+    res.status(200).json(userCircles);
+    return;
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: error });
+    return;
+  }
+});

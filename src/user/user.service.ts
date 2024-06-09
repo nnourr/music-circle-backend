@@ -5,6 +5,7 @@ import { UserRepo } from "./user.repo.js";
 import { ArtistInterface } from "../artist/artist.interface.js";
 import { UserInterface } from "./user.interface.js";
 import { CircleRepo } from "../circle/circle.repo.js";
+import { CircleWithCodeInterface } from "../circle/circle.interface.js";
 
 export class UserService {
   spotifyService = new SpotifyService();
@@ -40,7 +41,7 @@ export class UserService {
     let username = userInfo.display_name;
 
     if (username === undefined) {
-      const parts = userInfo.email.split("@");
+      const parts = userInfo.email.split("..");
       username = parts[0];
     }
 
@@ -63,6 +64,15 @@ export class UserService {
 
   getUser(email: string) {
     return this.userRepo.getUser(email);
+  }
+
+  async getUserCircles(email: string): Promise<CircleWithCodeInterface[]> {
+    const rawUser = await this.getUser(email);
+    const circleCodes = rawUser.circles;
+    const circles = await Promise.all(
+      circleCodes.map((circleCode) => this.circleRepo.getCircle(circleCode))
+    );
+    return circles satisfies CircleWithCodeInterface[];
   }
 
   getUsersInCircle(circleId: string): Promise<UserInterface[]> {

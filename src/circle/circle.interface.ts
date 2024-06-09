@@ -4,6 +4,11 @@ export interface CircleInterface {
   circleName: string;
 }
 
+export interface CircleWithCodeInterface {
+  circleName: string;
+  circleCode: string;
+}
+
 export interface CircleWithUserInfoInterface {
   circleId: string;
   circleName: string;
