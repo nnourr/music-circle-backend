@@ -3,7 +3,7 @@ import { AuthService } from "../auth/auth.service.js";
 import { SpotifyService } from "../spotify/spotify.service.js";
 import { UserRepo } from "./user.repo.js";
 import { ArtistInterface } from "../artist/artist.interface.js";
-import { UserInterface } from "./user.interface.js";
+import { UserInterface, UserInterfaceWithCircles } from "./user.interface.js";
 import { CircleRepo } from "../circle/circle.repo.js";
 import { CircleWithCodeInterface } from "../circle/circle.interface.js";
 
@@ -63,7 +63,7 @@ export class UserService {
   }
 
   getUser(email: string) {
-    return this.userRepo.getUser(email);
+    return this.userRepo.getUserWithCircles(email);
   }
 
   async getUserCircles(email: string): Promise<CircleWithCodeInterface[]> {
@@ -84,7 +84,7 @@ export class UserService {
     email: string,
     circles: string[],
     userArtists: ArtistInterface[]
-  ): UserInterface {
+  ): UserInterfaceWithCircles {
     return {
       username: username,
       email: email,
