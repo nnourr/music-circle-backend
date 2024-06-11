@@ -75,8 +75,8 @@ export class UserService {
     return circles satisfies CircleWithCodeInterface[];
   }
 
-  getUsersInCircle(circleId: string): Promise<UserInterface[]> {
-    return this.userRepo.getUsersInCircle(circleId);
+  getUsersInCircle(circleCode: string): Promise<UserInterface[]> {
+    return this.userRepo.getUsersInCircle(circleCode);
   }
 
   private createUser(

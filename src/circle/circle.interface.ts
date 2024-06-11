@@ -10,7 +10,7 @@ export interface CircleWithCodeInterface {
 }
 
 export interface CircleWithUserInfoInterface {
-  circleId: string;
+  circleCode: string;
   circleName: string;
   users: UserInterface[];
 }

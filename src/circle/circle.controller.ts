@@ -16,9 +16,9 @@ circleRouter.post("/:circle_name", async (req: Request, res: Response) => {
 });
 
 circleRouter.get("/:circle_id", async (req: Request, res: Response) => {
-  const circleId = req.params.circle_id;
+  const circleCode = req.params.circle_id;
   try {
-    res.json(await circleService.getCircleWithUsers(circleId)).send();
+    res.json(await circleService.getCircleWithUsers(circleCode)).send();
   } catch (error) {
     console.error(error);
     if (error instanceof NotFoundError) {

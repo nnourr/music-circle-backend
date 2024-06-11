@@ -14,20 +14,20 @@ export class CircleService {
     return await circleRepo.addCircle(circleName);
   }
 
-  async getCircle(circleId: string): Promise<CircleWithCodeInterface> {
-    return await circleRepo.getCircle(circleId);
+  async getCircle(circleCode: string): Promise<CircleWithCodeInterface> {
+    return await circleRepo.getCircle(circleCode);
   }
 
   async getCircleWithUsers(
-    circleId: string
+    circleCode: string
   ): Promise<CircleWithUsersInterface> {
-    const circleInfo: CircleInterface = await circleRepo.getCircle(circleId);
+    const circleInfo: CircleInterface = await circleRepo.getCircle(circleCode);
     const userInfo: UserInterface[] = await userService.getUsersInCircle(
-      circleId
+      circleCode
     );
 
     const circleWithUsers: CircleWithUsersInterface = {
-      circleId: circleId,
+      circleCode: circleCode,
       circleName: circleInfo.circleName,
       users: userInfo,
     };

@@ -52,13 +52,13 @@ export class UserRepo {
     return user;
   }
 
-  async getUsersInCircle(circleId: string): Promise<UserInterface[]> {
+  async getUsersInCircle(circleCode: string): Promise<UserInterface[]> {
     const usersInCircle: UserInterface[] = [];
     const usersInCircleSnapshot = await getDocs(
-      query(userCollection, where("circles", "array-contains", circleId))
+      query(userCollection, where("circles", "array-contains", circleCode))
     );
     if (usersInCircleSnapshot.empty) {
-      throw new NotFoundError(`no users found for circle ${circleId}`);
+      throw new NotFoundError(`no users found for circle ${circleCode}`);
     }
 
     usersInCircleSnapshot.forEach((doc) => {
