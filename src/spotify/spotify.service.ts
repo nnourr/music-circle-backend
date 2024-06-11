@@ -53,6 +53,7 @@ export class SpotifyService {
       name: spotifyArtist.name,
       popularity: spotifyArtist.popularity,
       genres: spotifyArtist.genres,
+      images: spotifyArtist.images,
     };
     return artist;
   }

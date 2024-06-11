@@ -41,7 +41,7 @@ export class UserService {
     let username = userInfo.display_name;
 
     if (username === undefined) {
-      const parts = userInfo.email.split("..");
+      const parts = userInfo.email.split("@");
       username = parts[0];
     }
 

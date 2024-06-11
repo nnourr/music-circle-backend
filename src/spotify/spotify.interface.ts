@@ -35,6 +35,12 @@ export interface SpotifyTopArtistsResponse {
   next: string | null;
 }
 
+export interface ArtistImage {
+  url: string;
+  height: number | null;
+  width: number | null;
+}
+
 export interface SpotifyArtistInterface {
   external_urls: {
     spotify: string;
@@ -46,11 +52,7 @@ export interface SpotifyArtistInterface {
   genres: string[];
   href: string;
   id: string;
-  images: Array<{
-    url: string;
-    height: number | null;
-    width: number | null;
-  }>;
+  images: ArtistImage[];
   name: string;
   popularity: number;
   type: string;
