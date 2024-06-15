@@ -1,4 +1,4 @@
-import { ArtistImage } from "@/spotify/spotify.interface";
+import { ArtistImage } from "../spotify/spotify.interface";
 
 export interface ArtistInterface {
   url: string;
