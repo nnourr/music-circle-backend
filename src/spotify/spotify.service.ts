@@ -10,7 +10,7 @@ export class SpotifyService {
   async getArtists(access_token: string): Promise<ArtistInterface[]> {
     try {
       const artistsResponse = await axios.get(
-        "https://api.spotify.com/v1/me/top/artists",
+        "https://api.spotify.com/v1/me/top/artists?limit=50",
         {
           headers: {
             "content-type": "application/x-www-form-urlencoded",
