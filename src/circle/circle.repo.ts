@@ -14,13 +14,10 @@ export class CircleRepo {
     return result.id;
   }
 
-  async getCircle(
-    circleCode: string
-  ): Promise<CircleWithCodeInterface | undefined> {
+  async getCircle(circleCode: string): Promise<CircleWithCodeInterface> {
     const circleDocument = await getDoc(doc(circleCollection, circleCode));
     if (!circleDocument.exists || !!!circleDocument.data()) {
-      // throw new NotFoundError("Unable to find Circle");
-      return;
+      throw new NotFoundError("Unable to find Circle");
     }
     const rawCircle: CircleInterface = circleDocument.data() as CircleInterface;
     return {
