@@ -69,10 +69,12 @@ export class UserService {
   async getUserCircles(email: string): Promise<CircleWithCodeInterface[]> {
     const rawUser = await this.getUser(email);
     const circleCodes = rawUser.circles;
-    const circles = await Promise.all(
+    const undefinedCircles = await Promise.all(
       circleCodes.map((circleCode) => this.circleRepo.getCircle(circleCode))
     );
-    return circles satisfies CircleWithCodeInterface[];
+    const circles = undefinedCircles.filter((circle) => circle !== undefined);
+
+    return circles as CircleWithCodeInterface[];
   }
 
   getUsersInCircle(circleCode: string): Promise<UserInterface[]> {
