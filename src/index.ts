@@ -11,7 +11,7 @@ import { SPOTIFY_REDIRECT_URI } from "./config/globals.js";
 export const app: Express = express();
 const port = process.env.PORT || 3000;
 
-app.use(cors({ origin: SPOTIFY_REDIRECT_URI }));
+app.use(cors({ origin: SPOTIFY_REDIRECT_URI?.slice(0, -1) }));
 app.use(express.json());
 
 app.get("/", (req: Request, res: Response) => {
