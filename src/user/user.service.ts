@@ -69,6 +69,9 @@ export class UserService {
   async getUserCircles(email: string): Promise<CircleWithCodeInterface[]> {
     const rawUser = await this.getUser(email);
     const circleCodes = rawUser.circles;
+    if (circleCodes === null) {
+      return [];
+    }
     const undefinedCircles = await Promise.all(
       circleCodes.map((circleCode) => {
         try {
