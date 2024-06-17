@@ -1,5 +1,7 @@
 import {
+  arrayRemove,
   arrayUnion,
+  deleteDoc,
   doc,
   getDoc,
   getDocs,
@@ -19,7 +21,7 @@ export class UserRepo {
   async setUser(user: UserWithCirclesInterface) {
     try {
       await setDoc(
-        doc(userCollection, user.email),
+        doc(userCollection, user.userId),
         {
           ...user,
           circles: arrayUnion(...user.circles),
@@ -31,20 +33,26 @@ export class UserRepo {
     }
   }
 
-  async addUserToCircle(email: string, circleCode: string) {
-    try {
-      const updatedDoc = await updateDoc(doc(userCollection, email), {
-        circles: arrayUnion(circleCode),
-      });
-    } catch (error) {
-      throw error;
-    }
+  async addUserToCircle(userId: string, circleCode: string) {
+    updateDoc(doc(userCollection, userId), {
+      circles: arrayUnion(circleCode),
+    });
   }
 
-  async getUserWithCircles(email: string) {
-    const userDocument = await getDoc(doc(userCollection, email));
+  async removeUserFromCircle(userId: string, circleCode: string) {
+    updateDoc(doc(userCollection, userId), {
+      circles: arrayRemove(circleCode),
+    });
+  }
+
+  async deleteUser(userId: string) {
+    deleteDoc(doc(userCollection, userId));
+  }
+
+  async getUserWithCircles(userId: string) {
+    const userDocument = await getDoc(doc(userCollection, userId));
     if (!userDocument.exists || userDocument.data() === undefined) {
-      throw new NotFoundError(`user ${email} not found`);
+      throw new NotFoundError(`user ${userId} not found`);
     }
     const user: UserWithCirclesInterface =
       userDocument.data() as UserWithCirclesInterface;
@@ -65,7 +73,7 @@ export class UserRepo {
       const user = doc.data() as UserWithCirclesInterface;
       usersInCircle.push({
         username: user.username,
-        email: user.email,
+        userId: user.userId,
         artists: user.artists,
       });
     });
