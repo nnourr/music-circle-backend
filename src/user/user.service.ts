@@ -47,8 +47,6 @@ export class UserService {
 
     const userCircles: string[] = [];
 
-    // get user circles with email to assess if user already existed
-    // if circles, set userCircles, delete old user
     try {
       const emailUserWithCircles: UserInterfaceWithCircles = await this.getUser(
         userInfo.email
