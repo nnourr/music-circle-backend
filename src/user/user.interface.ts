@@ -2,13 +2,13 @@ import { ArtistInterface } from "../artist/artist.interface.js";
 
 export interface UserInterface {
   username: string;
-  email: string;
+  userId: string;
   artists: ArtistInterface[];
 }
 
 export interface UserInterfaceWithCircles {
   username: string;
-  email: string;
+  userId: string;
   circles: string[];
   artists: ArtistInterface[];
 }

@@ -45,29 +45,47 @@ export class UserService {
       username = parts[0];
     }
 
+    const userCircles: string[] = [];
+
+    try {
+      const emailUserWithCircles: UserInterfaceWithCircles = await this.getUser(
+        userInfo.email
+      );
+      userCircles.push(...emailUserWithCircles.circles);
+      this.deleteUser(userInfo.email);
+    } catch {}
+
     try {
       await this.userRepo.setUser(
-        this.createUser(username, userInfo.email, [], userArtists)
+        this.createUser(username, userInfo.id, userCircles, userArtists)
       );
     } catch (error: any) {
       console.error(error);
       throw error;
     }
 
-    return { username: username, email: userInfo.email };
+    return { username: username, userId: userInfo.id };
   }
 
-  async addUserToCircle(email: string, circleCode: string) {
+  async deleteUser(userId: string) {
+    this.userRepo.deleteUser(userId);
+  }
+
+  async addUserToCircle(userId: string, circleCode: string) {
     await this.circleRepo.getCircle(circleCode);
-    this.userRepo.addUserToCircle(email, circleCode);
+    this.userRepo.addUserToCircle(userId, circleCode);
   }
 
-  getUser(email: string) {
-    return this.userRepo.getUserWithCircles(email);
+  async removeUserFromCircle(userId: string, circleCode: string) {
+    this.userRepo.removeUserFromCircle(userId, circleCode);
   }
 
-  async getUserCircles(email: string): Promise<CircleWithCodeInterface[]> {
-    const rawUser = await this.getUser(email);
+  getUser(userId: string) {
+    return this.userRepo.getUserWithCircles(userId);
+  }
+
+  async getUserCircles(userId: string): Promise<CircleWithCodeInterface[]> {
+    const rawUser = await this.getUser(userId);
     const circleCodes = rawUser.circles;
     if (circleCodes === null) {
       return [];
@@ -91,13 +109,13 @@ export class UserService {
 
   private createUser(
     username: string,
-    email: string,
+    userId: string,
     circles: string[],
     userArtists: ArtistInterface[]
   ): UserInterfaceWithCircles {
     return {
       username: username,
-      email: email,
+      userId: userId,
       circles: circles,
       artists: userArtists,
     };
