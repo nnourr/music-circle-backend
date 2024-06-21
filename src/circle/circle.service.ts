@@ -11,11 +11,15 @@ const circleRepo = new CircleRepo();
 const userService = new UserService();
 export class CircleService {
   async newCircle(circleName: string): Promise<string> {
-    return await circleRepo.addCircle(circleName);
+    return circleRepo.addCircle(circleName);
+  }
+
+  async renameCircle(circleCode: string, circleName: string) {
+    circleRepo.renameCircle(circleCode, circleName);
   }
 
   async getCircle(circleCode: string): Promise<CircleWithCodeInterface> {
-    return await circleRepo.getCircle(circleCode);
+    return circleRepo.getCircle(circleCode);
   }
 
   async getCircleWithUsers(

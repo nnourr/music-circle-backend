@@ -1,4 +1,4 @@
-import { addDoc, doc, getDoc } from "firebase/firestore";
+import { addDoc, doc, getDoc, updateDoc } from "firebase/firestore";
 import { circleCollection } from "../firebase/firebase.init.js";
 import {
   CircleInterface,
@@ -12,6 +12,12 @@ export class CircleRepo {
       circleName: circleName,
     });
     return result.id;
+  }
+
+  async renameCircle(circleCode: string, newCircleName: string) {
+    updateDoc(doc(circleCollection, circleCode), {
+      circleName: newCircleName,
+    });
   }
 
   async getCircle(circleCode: string): Promise<CircleWithCodeInterface> {
