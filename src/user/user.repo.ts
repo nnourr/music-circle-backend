@@ -75,6 +75,7 @@ export class UserRepo {
         username: user.username,
         userId: user.userId,
         artists: user.artists,
+        tracks: user.tracks,
       });
     });
 
