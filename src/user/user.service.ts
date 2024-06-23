@@ -6,6 +6,7 @@ import { ArtistInterface } from "../artist/artist.interface.js";
 import { UserInterface, UserInterfaceWithCircles } from "./user.interface.js";
 import { CircleRepo } from "../circle/circle.repo.js";
 import { CircleWithCodeInterface } from "../circle/circle.interface.js";
+import { TrackInterface } from "../tracks/track.interface.js";
 
 export class UserService {
   spotifyService = new SpotifyService();
@@ -16,6 +17,7 @@ export class UserService {
     let accessToken: string;
     let userInfo: SpotifyUserInfoResponse;
     let userArtists: ArtistInterface[];
+    let userTracks: TrackInterface[];
 
     try {
       accessToken = await this.authService.getAccessToken(loginCode);
@@ -33,6 +35,13 @@ export class UserService {
 
     try {
       userArtists = await this.spotifyService.getArtists(accessToken);
+    } catch (error: any) {
+      console.error(error);
+      throw error;
+    }
+
+    try {
+      userTracks = await this.spotifyService.getTracks(accessToken);
     } catch (error: any) {
       console.error(error);
       throw error;
@@ -57,7 +66,13 @@ export class UserService {
 
     try {
       await this.userRepo.setUser(
-        this.createUser(username, userInfo.id, userCircles, userArtists)
+        this.createUser(
+          username,
+          userInfo.id,
+          userCircles,
+          userArtists,
+          userTracks
+        )
       );
     } catch (error: any) {
       console.error(error);
@@ -111,13 +126,15 @@ export class UserService {
     username: string,
     userId: string,
     circles: string[],
-    userArtists: ArtistInterface[]
+    userArtists: ArtistInterface[],
+    userTracks: TrackInterface[]
   ): UserInterfaceWithCircles {
     return {
       username: username,
       userId: userId,
       circles: circles,
       artists: userArtists,
+      tracks: userTracks,
     };
   }
 }

@@ -2,9 +2,13 @@ import axios from "axios";
 import {
   SpotifyArtistInterface,
   SpotifyTopArtistsResponse,
+  SpotifyTopTracksResponse,
+  SpotifyTrack,
+  SpotifyTrackArtist,
   SpotifyUserInfoResponse,
 } from "./spotify.interface.js";
 import { ArtistInterface } from "../artist/artist.interface.js";
+import { TrackArtist, TrackInterface } from "../tracks/track.interface.js";
 
 export class SpotifyService {
   async getArtists(access_token: string): Promise<ArtistInterface[]> {
@@ -21,6 +25,26 @@ export class SpotifyService {
       const spotifyArtists: SpotifyTopArtistsResponse = artistsResponse.data;
       return spotifyArtists.items.map((artist) =>
         this.spotifyArtistToArtist(artist)
+      );
+    } catch (error: any) {
+      throw error;
+    }
+  }
+
+  async getTracks(access_token: string): Promise<TrackInterface[]> {
+    try {
+      const tracksResponse = await axios.get(
+        "https://api.spotify.com/v1/me/top/tracks?limit=50",
+        {
+          headers: {
+            "content-type": "application/x-www-form-urlencoded",
+            Authorization: "Bearer " + access_token,
+          },
+        }
+      );
+      const spotifyTracks: SpotifyTopTracksResponse = tracksResponse.data;
+      return spotifyTracks.items.map((track) =>
+        this.spotifyTrackToTrack(track)
       );
     } catch (error: any) {
       throw error;
@@ -56,5 +80,27 @@ export class SpotifyService {
       images: spotifyArtist.images,
     };
     return artist;
+  }
+
+  private spotifyTrackArtistToTrackArtist(
+    spotifyTrackArtist: SpotifyTrackArtist
+  ): TrackArtist {
+    return {
+      url: spotifyTrackArtist.external_urls.spotify,
+      name: spotifyTrackArtist.name,
+    };
+  }
+
+  private spotifyTrackToTrack(spotifyTrack: SpotifyTrack): TrackInterface {
+    const track: TrackInterface = {
+      url: spotifyTrack.external_urls.spotify,
+      name: spotifyTrack.name,
+      popularity: spotifyTrack.popularity,
+      artists: spotifyTrack.artists.map((artist) =>
+        this.spotifyTrackArtistToTrackArtist(artist)
+      ),
+      images: spotifyTrack.album.images,
+    };
+    return track;
   }
 }
