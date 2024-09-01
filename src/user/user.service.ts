@@ -71,7 +71,8 @@ export class UserService {
           userInfo.id,
           userCircles,
           userArtists,
-          userTracks
+          userTracks,
+          userInfo.images.map((imageData) => imageData.url)
         )
       );
     } catch (error: any) {
@@ -127,7 +128,8 @@ export class UserService {
     userId: string,
     circles: string[],
     userArtists: ArtistInterface[],
-    userTracks: TrackInterface[]
+    userTracks: TrackInterface[],
+    userImages: string[]
   ): UserInterfaceWithCircles {
     return {
       username: username,
@@ -135,6 +137,7 @@ export class UserService {
       circles: circles,
       artists: userArtists,
       tracks: userTracks,
+      images: userImages,
     };
   }
 }
