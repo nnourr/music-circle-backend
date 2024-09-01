@@ -71,11 +71,16 @@ export class UserRepo {
 
     usersInCircleSnapshot.forEach((doc) => {
       const user = doc.data() as UserWithCirclesInterface;
+      if (user.images === undefined) {
+        user.images = [];
+      }
+
       usersInCircle.push({
         username: user.username,
         userId: user.userId,
         artists: user.artists,
         tracks: user.tracks,
+        images: user.images,
       });
     });
 
