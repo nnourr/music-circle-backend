@@ -25,6 +25,12 @@ export class CircleService {
   }
 
   async getCircle(circleCode: string): Promise<CircleWithCodeInterface> {
-    return circleRepo.getCircle(circleCode);
+    const circle = await circleRepo.getCircle(circleCode);
+    if (!!!circle.users) {
+      const users = await userService.getUsersInCircle(circleCode);
+      circle.users = users;
+      circleRepo.patchCircle(circle);
+    }
+    return circle;
   }
 }
