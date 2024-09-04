@@ -5,12 +5,11 @@ import {
   CircleWithCodeInterface,
 } from "./circle.interface.js";
 import { NotFoundError } from "../config/config.exceptions.js";
+import { UserInterface } from "../user/user.interface.js";
 
 export class CircleRepo {
-  async addCircle(circleName: string): Promise<string> {
-    const result = await addDoc(circleCollection, {
-      circleName: circleName,
-    });
+  async addCircle(circle: CircleInterface): Promise<string> {
+    const result = await addDoc(circleCollection, circle);
     return result.id;
   }
 
@@ -29,6 +28,7 @@ export class CircleRepo {
     return {
       circleName: rawCircle.circleName,
       circleCode: circleCode,
+      users: rawCircle.users,
     } satisfies CircleWithCodeInterface;
   }
 }

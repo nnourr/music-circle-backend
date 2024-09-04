@@ -6,13 +6,18 @@ export const circleRouter = Router();
 const circleService = new CircleService();
 circleRouter.post("/:circle_name", async (req: Request, res: Response) => {
   const circleName = req.params.circle_name;
+  const userID = req.body.userID;
+  if (!!!userID) {
+    res.status(400).send();
+    return;
+  }
   try {
-    const response = await circleService.newCircle(circleName);
-    res.json(response).send();
+    const response = await circleService.newCircle(circleName, userID);
+    res.json(response);
   } catch (error) {
     const response = { error: error, reason: "failed to create new circle" };
     console.error(response);
-    res.status(500).json(response).send();
+    res.status(500).json(response);
   }
 });
 
@@ -21,12 +26,14 @@ circleRouter.patch("/:circle_code", async (req: Request, res: Response) => {
   const newCircleName = req.body.newCircleName;
 
   if (!!!newCircleName) {
-    res.status(400).send();
+    res.status(400);
+    return;
   }
 
   try {
     await circleService.renameCircle(circleCode, newCircleName);
-    res.send();
+    res.status(200);
+    return;
   } catch (error) {
     const response = { error: error, reason: "failed to create new circle" };
     console.error(response);
@@ -37,7 +44,7 @@ circleRouter.patch("/:circle_code", async (req: Request, res: Response) => {
 circleRouter.get("/:circle_id", async (req: Request, res: Response) => {
   const circleCode = req.params.circle_id;
   try {
-    const response = await circleService.getCircleWithUsers(circleCode);
+    const response = await circleService.getCircle(circleCode);
     res.json(response);
   } catch (error) {
     console.error(error);
