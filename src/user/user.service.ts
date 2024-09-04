@@ -57,9 +57,8 @@ export class UserService {
     const userCircles: string[] = [];
 
     try {
-      const emailUserWithCircles: UserInterfaceWithCircles = await this.getUser(
-        userInfo.email
-      );
+      const emailUserWithCircles: UserInterfaceWithCircles =
+        await this.getUserWithCircles(userInfo.email);
       userCircles.push(...emailUserWithCircles.circles);
       this.deleteUser(userInfo.email);
     } catch {}
@@ -88,20 +87,30 @@ export class UserService {
   }
 
   async addUserToCircle(userId: string, circleCode: string) {
-    await this.circleRepo.getCircle(circleCode);
+    const user = await this.userRepo.getUser(userId);
+    this.circleRepo.addUser(circleCode, user);
     this.userRepo.addUserToCircle(userId, circleCode);
   }
 
   async removeUserFromCircle(userId: string, circleCode: string) {
+    this.circleRepo.removeUser(circleCode, userId);
     this.userRepo.removeUserFromCircle(userId, circleCode);
   }
 
-  getUser(userId: string) {
+  async patchUser(user: UserInterfaceWithCircles) {
+    this.userRepo.setUser(user);
+  }
+
+  getUserWithCircles(userId: string) {
     return this.userRepo.getUserWithCircles(userId);
   }
 
+  getUser(userId: string) {
+    return this.userRepo.getUser(userId);
+  }
+
   async getUserCircles(userId: string): Promise<CircleWithCodeInterface[]> {
-    const rawUser = await this.getUser(userId);
+    const rawUser = await this.getUserWithCircles(userId);
     const circleCodes = rawUser.circles;
     if (circleCodes === null) {
       return [];

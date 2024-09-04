@@ -60,6 +60,23 @@ export class UserRepo {
     return user;
   }
 
+  async getUser(userId: string): Promise<UserInterface> {
+    const userDocument = await getDoc(doc(userCollection, userId));
+    if (!userDocument.exists || userDocument.data() === undefined) {
+      throw new NotFoundError(`user ${userId} not found`);
+    }
+    const userWithCircles: UserWithCirclesInterface =
+      userDocument.data() as UserWithCirclesInterface;
+
+    return {
+      artists: userWithCircles.artists,
+      images: userWithCircles.images,
+      tracks: userWithCircles.tracks,
+      userId: userWithCircles.userId,
+      username: userWithCircles.username,
+    };
+  }
+
   async getUsersInCircle(circleCode: string): Promise<UserInterface[]> {
     const usersInCircle: UserInterface[] = [];
     const usersInCircleSnapshot = await getDocs(

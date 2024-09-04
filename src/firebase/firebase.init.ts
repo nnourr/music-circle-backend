@@ -21,6 +21,6 @@ const firebaseConfig = {
 
 // Initialize Firebase
 const firebaseApp = initializeApp(firebaseConfig);
-const db = getFirestore(firebaseApp);
+export const db = getFirestore(firebaseApp);
 export const userCollection = collection(db, "users");
 export const circleCollection = collection(db, "circles");

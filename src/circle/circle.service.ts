@@ -1,7 +1,6 @@
 import {
   CircleInterface,
   CircleWithCodeInterface,
-  CircleWithUserInfoInterface as CircleWithUsersInterface,
 } from "./circle.interface.js";
 import { CircleRepo } from "./circle.repo.js";
 import { UserInterface } from "../user/user.interface.js";
@@ -10,8 +9,15 @@ import { UserService } from "../user/user.service.js";
 const circleRepo = new CircleRepo();
 const userService = new UserService();
 export class CircleService {
-  async newCircle(circleName: string): Promise<string> {
-    return circleRepo.addCircle(circleName);
+  async newCircle(circleName: string, userID: string): Promise<string> {
+    const userObj = await userService.getUserWithCircles(userID);
+    const newCircleCode = await circleRepo.addCircle({
+      circleName: circleName,
+      users: [userObj],
+    });
+    userObj.circles.push(newCircleCode);
+    userService.patchUser(userObj);
+    return newCircleCode;
   }
 
   async renameCircle(circleCode: string, circleName: string) {
@@ -19,23 +25,12 @@ export class CircleService {
   }
 
   async getCircle(circleCode: string): Promise<CircleWithCodeInterface> {
-    return circleRepo.getCircle(circleCode);
-  }
-
-  async getCircleWithUsers(
-    circleCode: string
-  ): Promise<CircleWithUsersInterface> {
-    const circleInfo: CircleInterface = await circleRepo.getCircle(circleCode);
-    const userInfo: UserInterface[] = await userService.getUsersInCircle(
-      circleCode
-    );
-
-    const circleWithUsers: CircleWithUsersInterface = {
-      circleCode: circleCode,
-      circleName: circleInfo.circleName,
-      users: userInfo,
-    };
-
-    return circleWithUsers;
+    const circle = await circleRepo.getCircle(circleCode);
+    if (!!!circle.users) {
+      const users = await userService.getUsersInCircle(circleCode);
+      circle.users = users;
+      circleRepo.patchCircle(circle);
+    }
+    return circle;
   }
 }

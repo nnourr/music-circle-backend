@@ -82,7 +82,7 @@ userRouter.get("/:userId", async (req: Request, res: Response) => {
   }
 
   try {
-    const user: UserInterface = await userService.getUser(userId);
+    const user: UserInterface = await userService.getUserWithCircles(userId);
     res.status(200).json(user);
     return;
   } catch (error) {
