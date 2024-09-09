@@ -26,13 +26,13 @@ circleRouter.patch("/:circle_code", async (req: Request, res: Response) => {
   const newCircleName = req.body.newCircleName;
 
   if (!!!newCircleName) {
-    res.status(400);
+    res.status(400).send();
     return;
   }
 
   try {
     await circleService.renameCircle(circleCode, newCircleName);
-    res.status(200);
+    res.status(200).send();
     return;
   } catch (error) {
     const response = { error: error, reason: "failed to create new circle" };
