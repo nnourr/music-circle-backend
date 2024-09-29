@@ -1,9 +1,8 @@
 import { Image } from "../spotify/spotify.interface";
 
-export interface ArtistInterface {
+export interface ItemInterface {
   url: string;
   name: string;
   popularity: number;
-  genres: string[];
   images: Image[];
 }
