@@ -29,7 +29,7 @@ export class CircleService {
     if (!!!circle.users) {
       const users = await userService.getUsersInCircle(circleCode);
       circle.users = users;
-      circleRepo.patchCircle(circle);
+      circleRepo.addUsersToCircle(circle);
     }
     return circle;
   }

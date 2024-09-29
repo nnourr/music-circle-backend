@@ -2,11 +2,13 @@ import { SpotifyUserInfoResponse } from "../spotify/spotify.interface.js";
 import { AuthService } from "../auth/auth.service.js";
 import { SpotifyService } from "../spotify/spotify.service.js";
 import { UserRepo } from "./user.repo.js";
-import { ArtistInterface } from "../artist/artist.interface.js";
+import { ArtistInterface } from "../item/artist/artist.interface.js";
 import { UserInterface, UserInterfaceWithCircles } from "./user.interface.js";
 import { CircleRepo } from "../circle/circle.repo.js";
 import { CircleWithCodeInterface } from "../circle/circle.interface.js";
-import { TrackInterface } from "../tracks/track.interface.js";
+import { TrackInterface } from "../item/tracks/track.interface.js";
+import { NotFoundError } from "../config/config.exceptions.js";
+import { ItemInterface } from "../item/item.interface.js";
 
 export class UserService {
   spotifyService = new SpotifyService();
@@ -56,6 +58,7 @@ export class UserService {
 
     const userCircles: string[] = [];
 
+    // migrate users still saved by email
     try {
       const emailUserWithCircles: UserInterfaceWithCircles =
         await this.getUserWithCircles(userInfo.email);
@@ -63,23 +66,42 @@ export class UserService {
       this.deleteUser(userInfo.email);
     } catch {}
 
+    const completeUser: UserInterfaceWithCircles = this.createUser(
+      username,
+      userInfo.id,
+      userCircles,
+      userArtists,
+      userTracks,
+      userInfo.images.map((imageData) => imageData.url)
+    );
+
     try {
-      await this.userRepo.setUser(
-        this.createUser(
-          username,
-          userInfo.id,
-          userCircles,
-          userArtists,
-          userTracks,
-          userInfo.images.map((imageData) => imageData.url)
-        )
+      const existingUser = await this.userRepo.getUserWithCircles(
+        completeUser.userId || ""
       );
-    } catch (error: any) {
-      console.error(error);
-      throw error;
+      completeUser.circles = existingUser.circles;
+      if (
+        !this.itemsEqual(existingUser.artists, completeUser.artists) ||
+        !this.itemsEqual(existingUser.tracks || [], completeUser.tracks || [])
+      ) {
+        await this.userRepo.setUser(completeUser);
+
+        existingUser.circles.map(async (circleCode) => {
+          await this.circleRepo.setUser(circleCode, completeUser);
+        });
+      }
+    } catch (error) {
+      if (!(error instanceof NotFoundError)) {
+        throw error;
+      }
+      await this.userRepo.setUser(completeUser);
     }
 
-    return { username: username, userId: userInfo.id };
+    return {
+      username: username,
+      userId: userInfo.id,
+      userCircles: completeUser.circles,
+    };
   }
 
   async deleteUser(userId: string) {
@@ -88,7 +110,7 @@ export class UserService {
 
   async addUserToCircle(userId: string, circleCode: string) {
     const user = await this.userRepo.getUser(userId);
-    this.circleRepo.addUser(circleCode, user);
+    this.circleRepo.setUser(circleCode, user);
     this.userRepo.addUserToCircle(userId, circleCode);
   }
 
@@ -148,5 +170,14 @@ export class UserService {
       tracks: userTracks,
       images: userImages,
     };
+  }
+
+  private itemsEqual(items1: ItemInterface[], items2: ItemInterface[]) {
+    return (
+      items1.length == items2.length &&
+      items1.every((element, index) => {
+        return element.name === items2[index].name;
+      })
+    );
   }
 }

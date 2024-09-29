@@ -21,7 +21,7 @@ export class CircleRepo {
     return result.id;
   }
 
-  async addUser(circleCode: string, newUser: UserInterface) {
+  async setUser(circleCode: string, newUser: UserInterface) {
     runTransaction(db, async (transaction) => {
       const circle = await transaction.get(doc(circleCollection, circleCode));
       if (!circle.exists()) {
@@ -29,7 +29,7 @@ export class CircleRepo {
       }
       const users: UserInterface[] = circle.data()?.users;
       if (users === undefined) {
-        throw "Unexpected error: no users";
+        throw new Error("Unexpected error: no users");
       }
       const userIndex = users.findIndex(
         (user) => user.userId === newUser.userId
@@ -70,13 +70,10 @@ export class CircleRepo {
     });
   }
 
-  async patchCircle(circle: CircleWithCodeInterface) {
+  async addUsersToCircle(circle: CircleWithCodeInterface) {
     circle.users.forEach((user) => {
       if (user.tracks === undefined) {
         delete user.tracks;
-      }
-      if (user.userId === undefined) {
-        delete user.userId;
       }
       if (user.username === undefined) {
         delete user.username;
