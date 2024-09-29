@@ -43,7 +43,7 @@ export class SpotifyService {
         }
       );
       const tracksResponseHundred = await axios.get(
-        "https://api.spotify.com/v1/me/top/tracks??offset=50&limit=50",
+        "https://api.spotify.com/v1/me/top/tracks?offset=50&limit=50",
         {
           headers: {
             "content-type": "application/x-www-form-urlencoded",
