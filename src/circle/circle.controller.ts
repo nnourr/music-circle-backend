@@ -7,6 +7,7 @@ const circleService = new CircleService();
 circleRouter.post("/:circle_name", async (req: Request, res: Response) => {
   const circleName = req.params.circle_name;
   const userID = req.body.userID;
+  console.info("Creating new Circle");
   if (!!!userID) {
     res.status(400).send();
     return;
@@ -22,6 +23,7 @@ circleRouter.post("/:circle_name", async (req: Request, res: Response) => {
 });
 
 circleRouter.patch("/:circle_code", async (req: Request, res: Response) => {
+  console.info("Updating Circle Name");
   const circleCode = req.params.circle_code;
   const newCircleName = req.body.newCircleName;
 
@@ -43,6 +45,7 @@ circleRouter.patch("/:circle_code", async (req: Request, res: Response) => {
 
 circleRouter.get("/:circle_id", async (req: Request, res: Response) => {
   const circleCode = req.params.circle_id;
+  console.info(`Circle Controler: Getting Circle With ID: ${circleCode}`);
   try {
     const response = await circleService.getCircle(circleCode);
     res.json(response);
@@ -60,6 +63,7 @@ circleRouter.get("/:circle_id", async (req: Request, res: Response) => {
 
 circleRouter.get("/:circle_id/name", async (req: Request, res: Response) => {
   const circleCode = req.params.circle_id;
+  console.info(`Circle Controller: Getting Circle Name`);
   try {
     const response = await circleService.getCircle(circleCode);
     res.json(response);

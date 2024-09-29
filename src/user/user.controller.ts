@@ -9,6 +9,7 @@ const userService = new UserService();
 
 userRouter.post("/", async (req: Request, res: Response) => {
   const loginCode = req.body?.loginCode;
+  console.info(`User Controller: Logging in user`);
 
   if (!!!loginCode) {
     res.status(400).json("Bad request");
@@ -30,6 +31,7 @@ userRouter.post(
   async (req: Request, res: Response) => {
     const userId = req.params.userId;
     const circleCode = req.params.circleCode;
+    console.info(`User Controller: Adding user to Circle: ${circleCode}`);
 
     if (!!!userId || !!!circleCode) {
       res.status(400).json("Bad request");
@@ -54,6 +56,7 @@ userRouter.delete(
   async (req: Request, res: Response) => {
     const userId = req.params.userId;
     const circleCode = req.params.circleCode;
+    console.info(`User Controller: Removing User from Circle: ${circleCode}`);
 
     if (!!!userId || !!!circleCode) {
       res.status(400).json("Bad request");
@@ -75,6 +78,7 @@ userRouter.delete(
 
 userRouter.get("/:userId", async (req: Request, res: Response) => {
   const userId = req.params.userId;
+  console.info(`User Controller: Getting user info`);
 
   if (!!!userId) {
     res.status(400).json("Bad request");
@@ -94,6 +98,7 @@ userRouter.get("/:userId", async (req: Request, res: Response) => {
 
 userRouter.get("/:userId/circles", async (req: Request, res: Response) => {
   const userId = req.params.userId;
+  console.info(`User Controller: Getting user Circles`);
 
   if (!!!userId) {
     res.status(400).json("Bad request");
