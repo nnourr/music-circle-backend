@@ -5,6 +5,7 @@ export const spotifyRouter = Router();
 const spotifyService = new SpotifyService();
 
 spotifyRouter.get("/:token/artists", async (req: Request, res: Response) => {
+  console.info(`Spotify Controller: Getting User Artists`);
   try {
     const artists = await spotifyService.getArtists(req.params.token);
     res.json(artists);
@@ -14,6 +15,7 @@ spotifyRouter.get("/:token/artists", async (req: Request, res: Response) => {
 });
 
 spotifyRouter.get("/:token", async (req: Request, res: Response) => {
+  console.info(`Spotify Controller: Getting User Info`);
   try {
     const userInfo = await spotifyService.getUserInfo(req.params.token);
     res.json(userInfo);
