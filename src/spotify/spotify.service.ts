@@ -33,7 +33,7 @@ export class SpotifyService {
 
   async getTracks(access_token: string): Promise<TrackInterface[]> {
     try {
-      const tracksResponse = await axios.get(
+      const tracksResponseFifty = await axios.get(
         "https://api.spotify.com/v1/me/top/tracks?limit=50",
         {
           headers: {
@@ -42,7 +42,19 @@ export class SpotifyService {
           },
         }
       );
-      const spotifyTracks: SpotifyTopTracksResponse = tracksResponse.data;
+      const tracksResponseHundred = await axios.get(
+        "https://api.spotify.com/v1/me/top/tracks?limit=50",
+        {
+          headers: {
+            "content-type": "application/x-www-form-urlencoded",
+            Authorization: "Bearer " + access_token,
+          },
+        }
+      );
+      const spotifyTracks: SpotifyTopTracksResponse = tracksResponseFifty.data;
+      const spotifyTracksHundred: SpotifyTopTracksResponse =
+        tracksResponseHundred.data;
+      spotifyTracks.items.push(...spotifyTracksHundred.items);
       return spotifyTracks.items.map((track) =>
         this.spotifyTrackToTrack(track)
       );
